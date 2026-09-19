@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Profile</title>
+</head>
+<body>
+
+<h2>Admin Profile</h2>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <p style="color:green;">{{ message }}</p>
+  {% endfor %}
+{% endwith %}
+
+{% if admin.profile_image %}
+    <img src="{{ url_for('static', filename='uploads/admin_images/' + admin.profile_image) }}"
+         alt="Admin Profile Image"
+         width="150"
+         height="150">
+{% else %}
+    <p>No profile image uploaded.</p>
+{% endif %}
+
+<form method="POST" action="/admin/profile" enctype="multipart/form-data">
+
+    <label>Name:</label><br>
+    <input type="text" name="name" value="{{ admin.name }}" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" value="{{ admin.email }}" required><br><br>
+
+    <label>New Password (optional):</label><br>
+    <input type="password" name="password"><br><br>
+
+    <label>Upload New Profile Image (optional):</label><br>
+    <input type="file" name="profile_image" accept="image/*"><br><br>
+
+    <button type="submit">Update Profile</button>
+</form>
+
+<br>
+<a href="/admin-dashboard">Back to Dashboard</a>
+
+</body>
+</html>
