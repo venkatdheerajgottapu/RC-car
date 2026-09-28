@@ -1,28 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Verify OTP</title>
-</head>
-<body>
+{% extends "admin/admin_layout.html" %}
 
-<h2>Verify OTP</h2>
+{% block title %}Verify OTP | Admin Portal{% endblock %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <p style="color:red;">{{ message }}</p>
-  {% endfor %}
-{% endwith %}
+{% block content %}
+<div class="form-card" style="max-width: 460px;">
+    <div style="text-align: center; margin-bottom: 28px;">
+        <span style="font-family: var(--font-subheading); font-size: 11px; font-weight: 800; color: var(--primary-orange); letter-spacing: 2px;">SECURITY VERIFICATION</span>
+        <h2>VERIFY EMAIL OTP</h2>
+        <p style="color: var(--text-muted); font-size: 13px;">Check your email inbox for the 6-digit verification code</p>
+    </div>
 
-<form method="POST" action="/verify-otp">
+    <form method="POST" action="/verify-otp">
+        <div class="form-group">
+            <label for="otp">Enter Verification OTP</label>
+            <input type="text" id="otp" name="otp" class="form-control" placeholder="123456" required autofocus style="letter-spacing: 4px; font-weight: 700; text-align: center; font-size: 18px;">
+        </div>
 
-    <label>Enter OTP:</label><br>
-    <input type="text" name="otp" required><br><br>
+        <div class="form-group">
+            <label for="password">Set Admin Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Create a secure password" required>
+        </div>
 
-    <label>Create Password:</label><br>
-    <input type="password" name="password" required><br><br>
-
-    <button type="submit">Verify & Register</button>
-</form>
-
-</body>
-</html>
+        <button type="submit" class="btn-submit" style="margin-top: 12px;">Verify & Complete Registration</button>
+    </form>
+</div>
+{% endblock %}

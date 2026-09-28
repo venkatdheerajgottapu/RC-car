@@ -1,80 +1,51 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Orders</title>
-    <style>
-        .container {
-            width: 70%;
-            margin: auto;
-            margin-top: 30px;
-        }
+{% extends "layout.html" %}
 
-        .order-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
-        }
+{% block title %}My Orders | TERRAIN X-TREME RC{% endblock %}
 
-        .order-card h3 {
-            margin: 0 0 10px 0;
-        }
-
-        .order-info {
-            line-height: 1.5;
-        }
-
-        .view-btn {
-            padding: 8px 12px;
-            background-color: #0077ff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            margin-top: 10px;
-        }
-
-        .view-btn:hover {
-            background-color: #005fcc;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-
-    <h2>📦 My Orders</h2>
-
-    {% if orders|length == 0 %}
-        <p>You have not placed any orders yet.</p>
-        <a href="/user/products">Start Shopping</a>
-
-    {% else %}
-
-        {% for order in orders %}
-        <div class="order-card">
-
-            <h3>Order #{{ order.order_id }}</h3>
-
-            <div class="order-info">
-                <p><strong>Amount:</strong> ₹{{ order.amount }}</p>
-                <p><strong>Status:</strong> {{ order.payment_status }}</p>
-                <p><strong>Date:</strong> {{ order.created_at }}</p>
-            </div>
-
-            <a href="/user/order-success/{{ order.order_id }}" class="view-btn">
-                View Order Details
-            </a>
-            <a href="/user/download-invoice/{{ order.order_id }}" class="view-btn" style="background-color: #28a745;">
-                📄 Download Invoice (PDF)
-            </a>
-        </div>
-        {% endfor %}
-
-    {% endif %}
-
+{% block content %}
+<div class="section-header">
+    <h2 class="section-title">MY ORDER HISTORY</h2>
+    <a href="/user/products" class="view-all-link">&larr; BACK TO CATALOG</a>
 </div>
 
-</body>
-</html>
+{% if not orders %}
+    <div style="background-color: var(--bg-dark-card); border: 1px solid var(--border-dark); border-radius: 8px; padding: 40px; text-align: center; max-width: 600px; margin: 20px auto;">
+        <h3 style="font-family: var(--font-heading); font-size: 24px; color: white; margin-bottom: 8px;">NO ORDERS PLACED YET</h3>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">You haven't completed any purchases yet.</p>
+        <a href="/user/products" class="btn-submit" style="display: inline-block; width: auto; padding: 10px 24px; text-decoration: none;">START SHOPPING</a>
+    </div>
+{% else %}
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Date & Time</th>
+                    <th>Amount</th>
+                    <th>Payment Status</th>
+                    <th>Invoice PDF</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td style="font-family: var(--font-subheading); font-weight: 800; color: var(--primary-orange);">#ORD-{{ order.order_id }}</td>
+                    <td style="color: var(--text-muted); font-size: 13px;">{{ order.created_at }}</td>
+                    <td style="font-weight: 800; color: white;">₹{{ "%.2f"|format(order.amount) }}</td>
+                    <td>
+                        <span style="background-color: rgba(40, 167, 69, 0.2); border: 1px solid #28a745; color: #28a745; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase;">
+                            {{ order.payment_status or 'PAID' }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="/download-invoice/{{ order.order_id }}" class="btn-submit" style="display: inline-block; width: auto; padding: 6px 14px; font-size: 12px; text-decoration: none; background-color: var(--bg-dark-elevated);">
+                            Download Invoice PDF
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+{% endblock %}

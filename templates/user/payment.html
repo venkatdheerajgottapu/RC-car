@@ -1,128 +1,77 @@
-<!-- templates/user/payment.html -->
+{% extends "layout.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Checkout Payment | TERRAIN X-TREME RC{% endblock %}
 
-    <title>SmartCart - Payment</title>
+{% block content %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-    <!-- Razorpay Checkout -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-</head>
+<div class="form-card" style="text-align: center; max-width: 550px;">
+    <div class="brand-icon" style="margin: 0 auto 16px; width: 60px; height: 60px;">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+        </svg>
+    </div>
 
-<body>
+    <h2 style="font-family: var(--font-heading); font-size: 36px; color: white;">SECURE CHECKOUT</h2>
+    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Your order is ready for payment confirmation.</p>
 
-    <h1>SmartCart Payment</h1>
+    <div style="background: var(--bg-dark-main); border: 1px solid var(--border-dark); border-radius: 8px; padding: 20px; margin-bottom: 28px;">
+        <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">TOTAL ORDER AMOUNT</div>
+        <div style="font-family: var(--font-subheading); font-size: 38px; font-weight: 800; color: var(--primary-orange);">
+            ₹{{ "%.2f"|format(amount) }}
+        </div>
+        <div style="font-size: 12px; color: #28a745; font-weight: 600; margin-top: 4px;">&#10003; 256-Bit SSL Encrypted & Secured</div>
+    </div>
 
-    <p>Amount: ₹{{ amount }}</p>
-
-    <button type="button" id="rzp-button">
-        Pay Now
+    <button type="button" id="rzp-button" class="btn-submit" style="font-size: 16px; padding: 14px;">
+        PAY NOW WITH RAZORPAY &rarr;
     </button>
+</div>
 
+<script>
+    var options = {
+        "key": "{{ key_id }}",
+        "amount": "{{ amount * 100 }}",
+        "currency": "INR",
+        "name": "TERRAIN X-TREME RC",
+        "description": "RC Parts & Vehicle Order Payment",
+        "order_id": "{{ order_id }}",
+        "handler": function (response) {
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/verify-payment"; 
 
-    <script>
+            var fields = {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature
+            };
 
-        var options = {
-
-            // Razorpay Key ID
-            "key": "{{ key_id }}",
-
-            // Amount must be in paise
-            "amount": "{{ amount * 100 }}",
-
-            // Currency
-            "currency": "INR",
-
-            // Store name
-            "name": "SmartCart",
-
-            // Payment description
-            "description": "Order Payment",
-
-            // Razorpay Order ID
-            "order_id": "{{ order_id }}",
-
-            // Payment success handler
-            "handler": function (response) {
-
-                // Create form
-                var form = document.createElement("form");
-
-                form.method = "POST";
-
-                // Flask verification route
-                   form.action = "/verify-payment"; 
-
-
-                // Razorpay response values
-                var fields = {
-
-                    razorpay_payment_id:
-                        response.razorpay_payment_id,
-
-                    razorpay_order_id:
-                        response.razorpay_order_id,
-
-                    razorpay_signature:
-                        response.razorpay_signature
-                };
-
-
-                // Add hidden fields
-                for (var name in fields) {
-
-                    var input = document.createElement("input");
-
-                    input.type = "hidden";
-
-                    input.name = name;
-
-                    input.value = fields[name];
-
-                    form.appendChild(input);
-                }
-
-
-                // Add form to page
-                document.body.appendChild(form);
-
-
-                // Submit form to Flask
-                form.submit();
-            },
-
-
-            // Optional customer information
-            "prefill": {
-                "name": "{{ user_name | default('') }}",
-                "email": "{{ user_email | default('') }}"
-            },
-
-
-            // Theme
-            "theme": {
-                "color": "#3399cc"
+            for (var name in fields) {
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = name;
+                input.value = fields[name];
+                form.appendChild(input);
             }
-        };
 
+            document.body.appendChild(form);
+            form.submit();
+        },
+        "prefill": {
+            "name": "{{ user_name | default('') }}",
+            "email": "{{ user_email | default('') }}"
+        },
+        "theme": {
+            "color": "#ff5500"
+        }
+    };
 
-        // Create Razorpay object
-        var rzp = new Razorpay(options);
-
-
-        // Pay button
-        document.getElementById("rzp-button").onclick = function(e) {
-
-           
-
-            rzp.open();
-            e.preventDefault();
-        };
-
-    </script>
-
-</body>
-</html>
+    var rzp = new Razorpay(options);
+    document.getElementById("rzp-button").onclick = function(e) {
+        rzp.open();
+        e.preventDefault();
+    };
+</script>
+{% endblock %}

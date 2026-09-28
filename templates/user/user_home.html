@@ -1,27 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Dashboard</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-<!-- Flash Messages -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <p style="color:green;">{{ message }}</p>
-  {% endfor %}
-{% endwith %}
+{% block title %}User Dashboard | TERRAIN X-TREME RC{% endblock %}
 
-<h2>Welcome, {{ user_name }}!</h2>
+{% block content %}
+<div style="background-color: var(--bg-dark-card); border: 1px solid var(--border-dark); border-radius: 8px; padding: 32px; max-width: 900px; margin: 20px auto;">
+    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-dark); padding-bottom: 20px; margin-bottom: 24px;">
+        <div>
+            <span style="font-family: var(--font-subheading); font-size: 12px; font-weight: 800; color: var(--primary-orange); letter-spacing: 2px;">RACER PROFILE</span>
+            <h1 style="font-family: var(--font-heading); font-size: 36px; color: white;">WELCOME BACK, {{ user_name|upper }}!</h1>
+        </div>
+        <a href="/user-logout" class="btn-submit" style="width: auto; background-color: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; color: #dc3545; padding: 8px 18px; text-decoration: none;">LOGOUT</a>
+    </div>
 
-<a href="/user/products">Browse Products</a><br><br> 
-<a href="/user/cart">Veiw cart</a>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+        <a href="/user/products" style="background-color: var(--bg-dark-main); border: 1px solid var(--border-dark); border-radius: 8px; padding: 24px; text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all 0.3s ease;">
+            <div style="width: 50px; height: 50px; background: rgba(255,85,0,0.1); border: 1px solid var(--border-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-orange)" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            </div>
+            <h3 style="font-family: var(--font-subheading); font-size: 18px; color: white; margin-bottom: 4px;">Browse Catalog</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Explore latest RC monster trucks & parts</p>
+        </a>
 
+        <a href="/user/cart" style="background-color: var(--bg-dark-main); border: 1px solid var(--border-dark); border-radius: 8px; padding: 24px; text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all 0.3s ease;">
+            <div style="width: 50px; height: 50px; background: rgba(255,85,0,0.1); border: 1px solid var(--border-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-orange)" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
+            </div>
+            <h3 style="font-family: var(--font-subheading); font-size: 18px; color: white; margin-bottom: 4px;">My Shopping Cart</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">View items ready for checkout</p>
+        </a>
 
-<br><br>
-<a href="/user-logout">Logout</a>
-
-</body>
-</html>
-
-
+        <a href="/user/my-orders" style="background-color: var(--bg-dark-main); border: 1px solid var(--border-dark); border-radius: 8px; padding: 24px; text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all 0.3s ease;">
+            <div style="width: 50px; height: 50px; background: rgba(255,85,0,0.1); border: 1px solid var(--border-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-orange)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </div>
+            <h3 style="font-family: var(--font-subheading); font-size: 18px; color: white; margin-bottom: 4px;">Order History</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Track shipments & download invoices</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

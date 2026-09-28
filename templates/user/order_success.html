@@ -1,135 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Order Successful</title>
-    <style>
-        .success-container {
-            width: 60%;
-            margin: auto;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin-top: 40px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
+{% extends "layout.html" %}
 
-        .success-container h2 {
-            color: green;
-        }
+{% block title %}Order Success | TERRAIN X-TREME RC{% endblock %}
 
-        .order-details {
-            text-align: left;
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-
-        .items-list {
-            margin-top: 20px;
-        }
-
-        .items-list table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .items-list table, th, td {
-            border: 1px solid #ccc;
-        }
-
-        th, td {
-            padding: 10px;
-        }
-
-        .address-box {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: left;
-            margin-top: 15px;
-            line-height: 1.6;
-        }
-
-        .btn {
-            padding: 10px 18px;
-            background-color: #0077ff;
-            color: #fff;
-            border-radius: 5px;
-            text-decoration: none;
-            margin: 5px;
-            display: inline-block;
-            font-weight: bold;
-        }
-
-        .btn:hover {
-            background-color: #005fcc;
-        }
-
-        .btn-invoice {
-            background-color: #28a745;
-        }
-
-        .btn-invoice:hover {
-            background-color: #218838;
-        }
-    </style>
-</head>
-<body>
-
-<div class="success-container">
-
-    <h2>🎉 Your Order is Confirmed!</h2>
-    <p>Thank you for shopping with <strong>SmartCart</strong>.</p>
-
-    <div class="order-details">
-        <p><strong>Order ID:</strong> {{ order.order_id }}</p>
-        <p><strong>Payment ID:</strong> {{ order.razorpay_payment_id }}</p>
-        <p><strong>Amount Paid:</strong> ₹{{ order.amount }}</p>
-        <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+{% block content %}
+<div class="form-card" style="text-align: center; max-width: 600px;">
+    <div style="width: 70px; height: 70px; background: rgba(40, 167, 69, 0.15); border: 2px solid #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #28a745;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
     </div>
 
-    <div class="items-list">
-        <h3>Order Summary</h3>
+    <h1 style="font-family: var(--font-heading); font-size: 38px; color: white; margin-bottom: 8px;">ORDER CONFIRMED!</h1>
+    <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px;">Thank you for shopping with TERRAIN X-TREME RC. Your payment was verified and order #{{ order_id }} is being processed.</p>
 
-        <table>
-            <tr>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Price (₹)</th>
-            </tr>
-
-            {% for it in items %}
-            <tr>
-                <td>{{ it.product_name }}</td>
-                <td>{{ it.quantity }}</td>
-                <td>{{ it.price }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div style="display: flex; gap: 16px; justify-content: center; margin-top: 24px;">
+        <a href="/download-invoice/{{ order_id }}" class="btn-submit" style="width: auto; text-decoration: none; padding: 12px 24px;">
+            DOWNLOAD INVOICE PDF
+        </a>
+        <a href="/user/my-orders" class="btn-submit" style="width: auto; text-decoration: none; padding: 12px 24px; background-color: var(--bg-dark-elevated);">
+            VIEW MY ORDERS
+        </a>
     </div>
-
-    <div class="address-box">
-        <h3>📍 Delivery Address</h3>
-        {% if order.address %}
-            <p>
-                <strong>{{ order.name }}</strong><br>
-                {{ order.address }}<br>
-                {{ order.city }}{% if order.state %}, {{ order.state }}{% endif %}<br>
-                {% if order.pincode %}PIN: {{ order.pincode }}<br>{% endif %}
-                {% if order.phone %}Phone: {{ order.phone }}{% endif %}
-            </p>
-        {% else %}
-            <p style="color: #666;">No delivery address provided.</p>
-        {% endif %}
-    </div>
-
-    <br>
-
-    <a href="/user/download-invoice/{{ order.order_id }}" class="btn btn-invoice">📄 Download Invoice (PDF)</a>
-    <a href="/user/products" class="btn">Continue Shopping</a>
-    <a href="/user/my-orders" class="btn">View My Orders</a>
-
 </div>
-
-</body>
+{% endblock %}

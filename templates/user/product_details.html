@@ -1,22 +1,53 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Product Details</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-<h2>{{ product.name }}</h2>
+{% block title %}{{ product.name }} | TERRAIN X-TREME RC{% endblock %}
 
-<img src="/static/uploads/product_images/{{ product.image }}" width="300"><br><br>
+{% block content %}
+<div style="background-color: var(--bg-dark-card); border: 1px solid var(--border-dark); border-radius: 8px; padding: 32px; max-width: 1000px; margin: 20px auto; box-shadow: var(--box-shadow-card);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; align-items: center;">
+        
+        <!-- Product Image Stage -->
+        <div style="background-color: var(--bg-light-box); border-radius: 8px; padding: 24px; text-align: center; height: 380px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border-orange);">
+            {% if product.image %}
+                <img src="/static/uploads/product_images/{{ product.image }}" alt="{{ product.name }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/hero_rc_buggy.svg') }}" alt="{{ product.name }}" style="max-width: 100%; max-height: 100%;">
+            {% endif %}
+        </div>
 
-<p><strong>Description:</strong> {{ product.description }}</p>
-<p><strong>Category:</strong> {{ product.category }}</p>
-<p><strong>Price:</strong> ₹{{ product.price }}</p>
+        <!-- Product Specs & Buying Actions -->
+        <div style="display: flex; flex-direction: column;">
+            <span style="font-family: var(--font-subheading); font-size: 13px; font-weight: 800; color: var(--primary-orange); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">
+                {{ product.category or 'RC BASHING MACHINE' }}
+            </span>
+            <h1 style="font-family: var(--font-heading); font-size: 42px; line-height: 1.1; color: #ffffff; text-transform: uppercase; margin-bottom: 12px;">
+                {{ product.name }}
+            </h1>
+            
+            <div style="display: flex; align-items: center; gap: 8px; color: var(--star-gold); margin-bottom: 20px;">
+                &#9733;&#9733;&#9733;&#9733;&#9733; <span style="color: var(--text-muted); font-size: 13px;">(5.0 Customer Rating)</span>
+            </div>
 
-<br>
-<a href="/user/products">Back to Products</a>
-<a href="/user/add-to-cart/{{ product.product_id }}">Add to Cart</a>
+            <div style="font-family: var(--font-subheading); font-size: 36px; font-weight: 800; color: var(--primary-orange); margin-bottom: 24px;">
+                ₹{{ "%.2f"|format(product.price) }}
+            </div>
 
+            <div style="background-color: var(--bg-dark-main); border: 1px solid var(--border-dark); border-radius: 6px; padding: 16px; margin-bottom: 28px;">
+                <h4 style="font-family: var(--font-subheading); font-size: 14px; font-weight: 700; color: #ffffff; text-transform: uppercase; margin-bottom: 8px;">OVERVIEW & SPECS</h4>
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">{{ product.description }}</p>
+            </div>
 
-</body>
-</html>
+            <div style="display: flex; gap: 16px;">
+                <a href="/user/add-to-cart/{{ product.product_id }}" class="btn-submit" style="flex: 2; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    ADD TO CART
+                </a>
+                <a href="/user/products" class="btn-submit" style="flex: 1; text-align: center; background-color: var(--bg-dark-elevated); color: #ffffff; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                    &larr; BACK
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

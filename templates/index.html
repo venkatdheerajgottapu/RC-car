@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>SmartCart - Home</title>
-</head>
-<body>
-    <h1>Welcome to SmartCart</h1>
-    <p>Flask project setup successful!</p>
-</body>
-</html>
-<!-- -->>
+{% extends "layout.html" %}
+
+{% block title %}TERRAIN X-TREME RC | High Performance RC Vehicles & Upgrades{% endblock %}
+
+{% block content %}
+<script>
+    window.location.href = "/user/products";
+</script>
+{% endblock %}

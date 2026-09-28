@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6600"/>
+      <stop offset="100%" stop-color="#cc2200"/>
+    </linearGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2a2a2a"/>
+      <stop offset="50%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#ff5500"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Dust Particle Effect -->
+  <g opacity="0.3">
+    <circle cx="150" cy="380" r="40" fill="#d4701e" filter="url(#glow)"/>
+    <circle cx="220" cy="400" r="60" fill="#ff5500" filter="url(#glow)"/>
+    <circle cx="680" cy="390" r="50" fill="#d4701e" filter="url(#glow)"/>
+  </g>
+
+  <!-- Shadow -->
+  <ellipse cx="400" cy="430" rx="350" ry="25" fill="#050507" opacity="0.8"/>
+
+  <!-- RC Truck Body Shell -->
+  <!-- Main Frame -->
+  <path d="M 160 330 Q 220 230 350 200 L 520 200 Q 640 230 680 320 Q 620 340 500 340 L 260 340 Z" fill="url(#bodyGrad)" stroke="#ff6600" stroke-width="3"/>
+  
+  <!-- Cabin Windshield & Roll Cage -->
+  <path d="M 320 210 L 410 140 L 540 140 L 570 210 Z" fill="#000000" opacity="0.85" stroke="#ff5500" stroke-width="2"/>
+  <path d="M 335 205 L 415 150 L 530 150 L 555 205 Z" fill="#ff5500" opacity="0.25"/>
+
+  <!-- Racing Decals / Stripes -->
+  <path d="M 220 310 L 620 240 L 640 260 L 240 330 Z" fill="url(#orangeGrad)"/>
+  <text x="400" y="275" font-family="'Impact', sans-serif" font-size="28" font-weight="bold" fill="#ffffff" font-style="italic" letter-spacing="4">X-TREME 8S</text>
+
+  <!-- Spoiler Wings -->
+  <path d="M 140 250 L 190 230 L 220 270 L 160 280 Z" fill="#111111" stroke="#ff5500" stroke-width="2"/>
+
+  <!-- Heavy Duty Off-Road Wheels & Shock Absorbers -->
+  <!-- Shocks -->
+  <line x1="240" y1="320" x2="210" y2="390" stroke="#ff5500" stroke-width="12" stroke-linecap="round"/>
+  <line x1="240" y1="320" x2="210" y2="390" stroke="#ffffff" stroke-width="4" stroke-dasharray="4,4"/>
+  <line x1="580" y1="320" x2="610" y2="390" stroke="#ff5500" stroke-width="12" stroke-linecap="round"/>
+  <line x1="580" y1="320" x2="610" y2="390" stroke="#ffffff" stroke-width="4" stroke-dasharray="4,4"/>
+
+  <!-- Front Wheel & Treads -->
+  <g transform="translate(610, 390)">
+    <circle cx="0" cy="0" r="75" fill="#121212" stroke="#2a2a2a" stroke-width="6"/>
+    <!-- Deep Treads -->
+    <path d="M 0 -75 L 0 -65 M 53 -53 L 45 -45 M 75 0 L 65 0 M 53 53 L 45 45 M 0 75 L 0 65 M -53 53 L -45 45 M -75 0 L -65 0 M -53 -53 L -45 -45" stroke="#ff5500" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="45" fill="#ff5500"/>
+    <circle cx="0" cy="0" r="25" fill="#1a1a1a" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="0" cy="0" r="8" fill="#ff5500"/>
+  </g>
+
+  <!-- Rear Wheel & Treads -->
+  <g transform="translate(210, 390)">
+    <circle cx="0" cy="0" r="80" fill="#121212" stroke="#2a2a2a" stroke-width="6"/>
+    <!-- Deep Treads -->
+    <path d="M 0 -80 L 0 -70 M 56 -56 L 49 -49 M 80 0 L 70 0 M 56 56 L 49 49 M 0 80 L 0 70 M -56 56 L -49 49 M -80 0 L -70 0 M -56 -56 L -49 -49" stroke="#ff5500" stroke-width="12" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="50" fill="#ff5500"/>
+    <circle cx="0" cy="0" r="28" fill="#1a1a1a" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="0" cy="0" r="10" fill="#ff5500"/>
+  </g>
+</svg>

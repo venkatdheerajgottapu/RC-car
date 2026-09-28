@@ -1,62 +1,92 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Your Cart</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-<h2>Your Cart</h2>
+{% block title %}Shopping Cart | TERRAIN X-TREME RC{% endblock %}
 
-<!-- Flash Messages -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <p style="color:red;">{{ message }}</p>
-  {% endfor %}
-{% endwith %}
+{% block content %}
+<div class="section-header">
+    <h2 class="section-title">YOUR SHOPPING CART</h2>
+    <a href="/user/products" class="view-all-link">&larr; CONTINUE SHOPPING</a>
+</div>
 
 {% if not cart %}
-    <p>Your cart is empty.</p>
-    <a href="/user/products">Shop Now</a>
+    <div style="background-color: var(--bg-dark-card); border: 1px solid var(--border-dark); border-radius: 8px; padding: 48px; text-align: center; max-width: 600px; margin: 40px auto;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--primary-orange)" stroke-width="1.5" style="margin-bottom: 16px;">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <h3 style="font-family: var(--font-heading); font-size: 28px; color: white; margin-bottom: 8px;">YOUR CART IS CURRENTLY EMPTY</h3>
+        <p style="color: var(--text-muted); margin-bottom: 24px;">Find your next RC Monster Truck, Crawler or upgrade parts in our catalog.</p>
+        <a href="/user/products" class="btn-submit" style="display: inline-block; width: auto; padding: 12px 32px; text-decoration: none;">EXPLORE PRODUCTS NOW</a>
+    </div>
 {% else %}
 
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Image</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Total</th>
-        <th>Action</th>
-    </tr>
+<div style="display: grid; grid-template-columns: 2.5fr 1fr; gap: 32px;">
+    
+    <!-- Cart Items Table -->
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pid, item in cart.items() %}
+                <tr>
+                    <td style="width: 90px;">
+                        <div style="background: white; border-radius: 4px; padding: 4px; width: 70px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                            <img src="/static/uploads/product_images/{{ item.image }}" alt="{{ item.name }}" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.src='/static/images/hero_rc_buggy.svg'">
+                        </div>
+                    </td>
+                    <td>
+                        <strong style="font-family: var(--font-subheading); font-size: 15px;">{{ item.name }}</strong>
+                    </td>
+                    <td style="color: var(--primary-orange); font-weight: 700;">₹{{ "%.2f"|format(item.price) }}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 8px; background: var(--bg-dark-main); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-dark); width: fit-content;">
+                            <a href="/user/cart/decrease/{{ pid }}" style="color: var(--primary-orange); font-weight: bold; padding: 0 4px; text-decoration: none;">&minus;</a>
+                            <span style="font-weight: bold; color: white;">{{ item.quantity }}</span>
+                            <a href="/user/cart/increase/{{ pid }}" style="color: var(--primary-orange); font-weight: bold; padding: 0 4px; text-decoration: none;">&#43;</a>
+                        </div>
+                    </td>
+                    <td style="color: var(--primary-orange); font-weight: 800;">₹{{ "%.2f"|format(item.price * item.quantity) }}</td>
+                    <td>
+                        <a href="/user/cart/remove/{{ pid }}" style="color: #dc3545; font-size: 13px; font-weight: 700; text-decoration: none;">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    {% for pid, item in cart.items() %}
-    <tr>
-        <td><img src="/static/uploads/product_images/{{ item.image }}" width="80"></td>
-        <td>{{ item.name }}</td>
-        <td>₹{{ item.price }}</td>
+    <!-- Summary Box -->
+    <div style="background-color: var(--bg-dark-card); border: 1px solid var(--border-dark); border-radius: 8px; padding: 24px; height: fit-content;">
+        <h3 style="font-family: var(--font-heading); font-size: 24px; color: white; border-bottom: 1px solid var(--border-dark); padding-bottom: 12px; margin-bottom: 16px;">ORDER SUMMARY</h3>
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--text-muted); font-size: 14px;">
+            <span>Subtotal:</span>
+            <span style="color: white; font-weight: 600;">₹{{ "%.2f"|format(grand_total) }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--text-muted); font-size: 14px;">
+            <span>Express Shipping:</span>
+            <span style="color: #28a745; font-weight: 600;">FREE</span>
+        </div>
+        
+        <div style="border-top: 1px dashed var(--border-dark); margin: 16px 0; padding-top: 16px; display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-family: var(--font-subheading); font-size: 16px; font-weight: 800; color: white;">GRAND TOTAL:</span>
+            <span style="font-family: var(--font-subheading); font-size: 24px; font-weight: 800; color: var(--primary-orange);">₹{{ "%.2f"|format(grand_total) }}</span>
+        </div>
 
-        <td>
-            <a href="/user/cart/decrease/{{ pid }}"> - </a>
-            {{ item.quantity }}
-            <a href="/user/cart/increase/{{ pid }}"> + </a>
-        </td>
+        <a href="/address" class="btn-submit" style="display: block; text-align: center; text-decoration: none; margin-top: 20px;">PROCEED TO CHECKOUT &rarr;</a>
+    </div>
 
-        <td>₹{{ item.price * item.quantity }}</td>
-
-        <td><a href="/user/cart/remove/{{ pid }}">Remove</a></td>
-    </tr>
-    {% endfor %}
-</table>
-
-<br>
-
-<h3>Grand Total: ₹{{ grand_total }}</h3>
-
-<a href="/address">Add Address</a>
-
-<a href="/user/products">Continue Shopping</a>
+</div>
 
 {% endif %}
-
-</body>
-</html>
+{% endblock %}

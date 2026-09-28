@@ -1,28 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Signup</title>
-</head>
-<body>
+{% extends "admin/admin_layout.html" %}
 
-<h2>Admin Registration</h2>
+{% block title %}Admin Registration | TERRAIN X-TREME RC{% endblock %}
 
-<!-- Flash messages -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <p style="color:red;">{{ message }}</p>
-  {% endfor %}
-{% endwith %}
+{% block content %}
+<div class="form-card" style="max-width: 460px;">
+    <div style="text-align: center; margin-bottom: 28px;">
+        <span style="font-family: var(--font-subheading); font-size: 11px; font-weight: 800; color: var(--primary-orange); letter-spacing: 2px;">NEW ADMINISTRATOR</span>
+        <h2>ADMIN REGISTRATION</h2>
+        <p style="color: var(--text-muted); font-size: 13px;">Enter your details to receive an OTP verification code</p>
+    </div>
 
-<form method="POST" action="/admin-signup">
-    <label>Name:</label><br>
-    <input type="text" name="name" required><br><br>
+    <form method="POST" action="/admin-signup">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="e.g. John Doe" required autofocus>
+        </div>
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+        <div class="form-group">
+            <label for="email">Work Email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="admin@terrain-rc.com" required>
+        </div>
 
-    <button type="submit">Send OTP</button>
-</form>
+        <button type="submit" class="btn-submit" style="margin-top: 12px;">Send Verification OTP</button>
+    </form>
 
-</body>
-</html>
+    <div style="margin-top: 24px; text-align: center; border-top: 1px solid var(--border-dark); padding-top: 18px; font-size: 13px; color: var(--text-muted);">
+        Already registered? <a href="/admin-login" style="color: var(--primary-orange); font-weight: 700;">Sign In</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,65 +1,36 @@
-<!DOCTYPE html>
+{% extends "admin/admin_layout.html" %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartCart - Admin Login</title>
-</head>
+{% block title %}Admin Login | TERRAIN X-TREME RC{% endblock %}
 
-<body>
-
-```
-<div>
-
-    <h1>Admin Login</h1>
-
-    <p>Login to SmartCart</p>
-
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div>
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
-    <!-- Login Form -->
-    <form method="POST" action="/admin-login">
-
-        <label for="email">Email</label>
-        <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter your email"
-            required
-        >
-        <br><br><br>
-        
-        <label for="password">Password</label>
-        <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter your password"
-            required
-        >
-
-        <button type="submit">Login</button>
-
-    </form>
-
-    <div>
-        Don't have an account?
-        <a href="/admin-signup">Create Account</a>
+{% block content %}
+<div class="form-card" style="max-width: 460px;">
+    <div style="text-align: center; margin-bottom: 28px;">
+        <div class="brand-icon" style="margin: 0 auto 16px auto; width: 56px; height: 56px;">
+            <svg viewBox="0 0 24 24" style="width: 32px; height: 32px;">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2.5" fill="none"/>
+            </svg>
+        </div>
+        <span style="font-family: var(--font-subheading); font-size: 11px; font-weight: 800; color: var(--primary-orange); letter-spacing: 2px;">AUTHENTICATION</span>
+        <h2>ADMIN LOGIN</h2>
+        <p style="color: var(--text-muted); font-size: 13px;">Sign in to access the store management panel</p>
     </div>
 
-</div>
-```
+    <form method="POST" action="/admin-login">
+        <div class="form-group">
+            <label for="email">Admin Email Address</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="admin@terrain-rc.com" required autofocus>
+        </div>
 
-</body>
-</html>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="••••••••••••" required>
+        </div>
+
+        <button type="submit" class="btn-submit" style="margin-top: 12px;">Sign In to Dashboard</button>
+    </form>
+
+    <div style="margin-top: 24px; text-align: center; border-top: 1px solid var(--border-dark); padding-top: 18px; font-size: 13px; color: var(--text-muted);">
+        Need an admin account? <a href="/admin-signup" style="color: var(--primary-orange); font-weight: 700;">Register Here</a>
+    </div>
+</div>
+{% endblock %}

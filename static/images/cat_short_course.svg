@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- Short Course Truck Trophy Truck Silhouette -->
+  <path d="M 10 52 L 20 40 L 40 32 L 68 32 L 85 45 L 90 55 L 10 55 Z" fill="none" stroke="#ff5500" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M 38 32 L 48 42 L 72 42" stroke="#ff5500" stroke-width="2"/>
+  <circle cx="26" cy="62" r="12" fill="none" stroke="#ff5500" stroke-width="3"/>
+  <circle cx="26" cy="62" r="4" fill="#ff5500"/>
+  <circle cx="74" cy="62" r="12" fill="none" stroke="#ff5500" stroke-width="3"/>
+  <circle cx="74" cy="62" r="4" fill="#ff5500"/>
+  <path d="M 5 66 Q 15 58 30 66" stroke="#ff5500" stroke-width="2" fill="none"/>
+</svg>

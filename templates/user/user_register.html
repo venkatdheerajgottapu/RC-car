@@ -1,35 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Registration</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-<h2>User Registration</h2>
+{% block title %}Create Account | TERRAIN X-TREME RC{% endblock %}
 
-<!-- Flash messages -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <p style="color:red;">{{ message }}</p>
-  {% endfor %}
-{% endwith %}
+{% block content %}
+<div class="form-card">
+    <div style="text-align: center; margin-bottom: 24px;">
+        <div class="brand-icon" style="margin: 0 auto 12px; width: 50px; height: 50px;">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="8.5" cy="7" r="4"></circle>
+                <line x1="20" y1="8" x2="20" y2="14"></line>
+                <line x1="17" y1="11" x2="23" y2="11"></line>
+            </svg>
+        </div>
+        <h2>JOIN THE RACING CLUB</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Register to enjoy fast checkout and order tracking.</p>
+    </div>
 
-<form method="POST" action="/user-register">
+    <form method="POST" action="/user-register">
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+        </div>
 
-    <label>Name:</label><br>
-    <input type="text" name="name" required><br><br>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" class="form-control" placeholder="driver@example.com" required>
+        </div>
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+        </div>
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
+        <button type="submit" class="btn-submit">CREATE ACCOUNT NOW &rarr;</button>
+    </form>
 
-    <button type="submit">Register</button>
-</form>
-
-<br>
-<a href="/user-login">Already have an account? Login</a>
-
-</body>
-</html>
+    <div style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted);">
+        Already registered? <a href="/user-login" style="color: var(--primary-orange); font-weight: 700;">Sign In</a>
+    </div>
+</div>
+{% endblock %}

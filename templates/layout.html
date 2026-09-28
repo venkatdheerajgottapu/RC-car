@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TERRAIN X-TREME RC | High Performance RC Shop{% endblock %}</title>
+    <!-- Google Fonts & Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="top-bar">
+        <div class="top-bar-notice">
+            <span class="badge-free">OFF-ROAD SPECIAL</span>
+            <span>Free Express Shipping on Orders Over ₹4,999 | Official Warranty Included</span>
+        </div>
+        <div class="top-bar-links">
+            <a href="/user/products">Catalog</a>
+            <a href="/user/my-orders">My Orders</a>
+            {% if session.get('user_id') %}
+                <a href="/user-logout">Logout ({{ session.get('user_name') }})</a>
+            {% else %}
+                <a href="/user-login">Login</a>
+                <a href="/user-register">Register</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <!-- Brand Logo -->
+            <a href="/user/products" class="brand-logo">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
+                        <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                        <path d="M12 3 v6 M12 15 v6 M3 12 h6 M15 12 h6" stroke="currentColor" stroke-width="2.5"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">TERRAIN <span>X-TREME</span></span>
+                    <span class="brand-subtitle">RC PERFORMANCE & PARTS</span>
+                </div>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="header-search">
+                <form method="GET" action="/user/products">
+                    <input type="text" name="search" placeholder="Search RC Cars, Monster Trucks, Batteries..." value="{{ request.args.get('search', '') }}">
+                    <button type="submit" aria-label="Search">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- User Actions -->
+            <div class="header-actions">
+                {% if session.get('user_id') %}
+                    <a href="/user-dashboard" class="action-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>Account</span>
+                    </a>
+                {% else %}
+                    <a href="/user-login" class="action-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        <span>Sign In</span>
+                    </a>
+                {% endif %}
+
+                <a href="/user/cart" class="action-item cart-icon-wrapper">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span>Cart</span>
+                    {% set cart_count = session.get('cart', {})|length %}
+                    <span class="cart-badge">{{ cart_count }}</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- SUB NAVIGATION -->
+        <nav class="sub-nav">
+            <div class="sub-nav-container">
+                <a href="/user/products" class="sub-nav-link highlight">SHOP ALL</a>
+                <a href="/user/products?category=RC Cars" class="sub-nav-link">RC CARS</a>
+                <a href="/user/products?category=Monster Trucks" class="sub-nav-link">TRUCKS</a>
+                <a href="/user/products?category=Parts" class="sub-nav-link">PARTS & UPGRADES</a>
+                <a href="/user/products?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
+                <a href="/user/products?category=Racing Zone" class="sub-nav-link">RACING ZONE</a>
+                <a href="/user/products" class="sub-nav-link">SUPPORT</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div style="max-width: 1400px; margin: 20px auto 0; padding: 0 24px;">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category if category != 'danger' else 'danger' }}">
+                {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- MAIN CONTENT BODY -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>TERRAIN X-TREME RC</h4>
+                <p style="font-size: 13px; margin-bottom: 16px;">The ultimate destination for ready-to-bash RC monster trucks, crawlers, drift cars, and original replacement upgrades.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">F</a>
+                    <a href="#" class="social-icon">T</a>
+                    <a href="#" class="social-icon">Y</a>
+                    <a href="#" class="social-icon">I</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>CATEGORIES</h4>
+                <ul class="footer-links">
+                    <li><a href="/user/products?category=Monster Trucks">Monster Trucks</a></li>
+                    <li><a href="/user/products?category=Crawlers">Rock Crawlers</a></li>
+                    <li><a href="/user/products?category=Short Course">Short Course Trucks</a></li>
+                    <li><a href="/user/products?category=Drifting">Drift & Street Bashers</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>CUSTOMER SUPPORT</h4>
+                <ul class="footer-links">
+                    <li><a href="/user/my-orders">Track Orders</a></li>
+                    <li><a href="/address">Shipping Information</a></li>
+                    <li><a href="#">Returns & Warranty</a></li>
+                    <li><a href="#">FAQ & Technical Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>RC RACE NEWS</h4>
+                <p style="font-size: 13px; margin-bottom: 12px;">Subscribe for exclusive releases, race events, and parts discounts.</p>
+                <form style="display: flex; gap: 8px;">
+                    <input type="email" placeholder="Your Email..." class="form-control" style="padding: 8px 12px;">
+                    <button type="button" class="btn-submit" style="width: auto; padding: 8px 16px;">JOIN</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 TERRAIN X-TREME RC. All rights reserved. | Powered by SmartCart Engine
+        </div>
+    </footer>
+
+</body>
+</html>

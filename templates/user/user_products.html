@@ -1,122 +1,201 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Products</title>
-    <style>
-    .product-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
+{% extends "layout.html" %}
 
-    .product-card {
-        width: 200px;
-        border: 1px solid #ddd;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
-        text-align: center;
-        background-color: #fff;
-        transition: 0.3s;
-    }
+{% block title %}TERRAIN X-TREME RC | Ready To Bash RC Cars & Trucks{% endblock %}
 
-    .product-card:hover {
-        box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
-        transform: translateY(-3px);
-    }
+{% block content %}
+<!-- HERO BANNER SECTION -->
+<section class="hero-banner" style="margin-top: -40px; margin-bottom: 40px; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); width: 100vw;">
+    <div class="hero-overlay-grid"></div>
+    <div class="hero-content">
+        <div class="hero-text-box">
+            <div class="hero-tagline">OFF-ROAD BASHING & RACING</div>
+            <h1 class="hero-title">READY TO BASH?<br><span style="color: var(--primary-orange);">EXPLORE NEW ARRIVALS</span></h1>
+            <p class="hero-description">Dominate any terrain with 8S brushless monster trucks, scale rock crawlers, and high-speed drift bashers. Engineered for maximum durability and speed.</p>
+            <a href="#catalog" class="hero-btn">
+                <span>SHOP NOW &rarr;</span>
+            </a>
+        </div>
+        <div class="hero-image-wrap">
+            <img src="{{ url_for('static', filename='images/hero_rc_buggy.svg') }}" alt="RC Off-Road Truck">
+        </div>
+    </div>
+    <div class="hero-controls">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+</section>
 
-    .product-card img {
-        width: 140px;
-        height: 100px;
-        object-fit: contain;
-        margin-bottom: 10px;
-    }
+<!-- POPULAR BRANDS BANNER -->
+<div class="section-header">
+    <h2 class="section-title">POPULAR BRANDS</h2>
+    <a href="#catalog" class="view-all-link">VIEW ALL &rsaquo;</a>
+</div>
+<div class="brands-grid">
+    <div class="brand-card traxxas"><span>TRAXXAS</span></div>
+    <div class="brand-card arrma"><span>ARRMA</span></div>
+    <div class="brand-card losi"><span>LOSI</span></div>
+    <div class="brand-card axial"><span>AXIAL</span></div>
+</div>
 
-    .product-card h3 {
-        margin: 5px 0;
-        font-size: 18px;
-    }
+<!-- RC CAR CATEGORIES TILES -->
+<div class="section-header">
+    <h2 class="section-title">RC CAR CATEGORIES</h2>
+</div>
+<div class="categories-grid">
+    <a href="/user/products?category=Monster Trucks" class="category-tile">
+        <div class="category-icon">
+            <img src="{{ url_for('static', filename='images/cat_monster.svg') }}" alt="Monster Trucks" width="36">
+        </div>
+        <span class="category-name">Monster Trucks</span>
+    </a>
+    <a href="/user/products?category=Crawlers" class="category-tile">
+        <div class="category-icon">
+            <img src="{{ url_for('static', filename='images/cat_crawler.svg') }}" alt="Crawlers" width="36">
+        </div>
+        <span class="category-name">Rock Crawlers</span>
+    </a>
+    <a href="/user/products?category=Short Course" class="category-tile">
+        <div class="category-icon">
+            <img src="{{ url_for('static', filename='images/cat_short_course.svg') }}" alt="Short Course" width="36">
+        </div>
+        <span class="category-name">Short Course</span>
+    </a>
+    <a href="/user/products?category=Drifting" class="category-tile">
+        <div class="category-icon">
+            <img src="{{ url_for('static', filename='images/cat_drifting.svg') }}" alt="Drifting" width="36">
+        </div>
+        <span class="category-name">Street & Drift</span>
+    </a>
+</div>
 
-    .product-card p {
-        margin: 2px 0;
-        font-size: 14px;
-        color: #555;
-    }
+<!-- LATEST RELEASES / MAIN PRODUCT CATALOG -->
+<div id="catalog" class="section-header">
+    <h2 class="section-title">
+        {% if request.args.get('category') %}
+            {{ request.args.get('category') }}
+        {% elif request.args.get('search') %}
+            Search: "{{ request.args.get('search') }}"
+        {% else %}
+            LATEST RELEASES
+        {% endif %}
+    </h2>
+    <div style="display: flex; gap: 12px; align-items: center;">
+        <!-- Category Filter Form -->
+        <form method="GET" action="/user/products" style="display: inline-block;">
+            <select name="category" onchange="this.form.submit()" class="form-control" style="padding: 6px 12px; font-size: 13px; background: var(--bg-dark-card); color: white;">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat.category }}" {% if request.args.get('category') == cat.category %}selected{% endif %}>
+                    {{ cat.category }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+        <a href="/user/products" class="view-all-link">CLEAR FILTERS &rsaquo;</a>
+    </div>
+</div>
 
-    .product-card a {
-        display: inline-block;
-        margin-top: 8px;
-        background-color: #007bff;
-        padding: 8px 12px;
-        border-radius: 5px;
-        color: white;
-        text-decoration: none;
-        font-size: 14px;
-    }
-
-    .product-card a:hover {
-        background-color: #0056b3;
-    }
-</style>
-
-</head>
-<body>
-
-<h2>All Products</h2>
-
-<!-- Flash Messages -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <p style="color:green;">{{ message }}</p>
-  {% endfor %}
-{% endwith %}
-
-<!-- Search Bar -->
-<form method="GET" action="/user/products">
-    <input type="text" name="search" placeholder="Search product..."
-           value="{{ request.args.get('search', '') }}">
-    <button type="submit">Search</button>
-</form>
-
-<br>
-
-<!-- Category Filter -->
-<form method="GET" action="/user/products">
-    <select name="category">
-        <option value="">All Categories</option>
-
-        {% for cat in categories %}
-        <option value="{{ cat.category }}"
-            {% if request.args.get('category') == cat.category %} selected {% endif %}>
-            {{ cat.category }}
-        </option>
+<!-- PRODUCT GRID -->
+<div class="product-grid">
+    {% if products %}
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-badge">IN STOCK</div>
+            <div class="product-image-box">
+                {% if product.image %}
+                    <img src="/static/uploads/product_images/{{ product.image }}" alt="{{ product.name }}" onerror="this.src='/static/images/hero_rc_buggy.svg'">
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/hero_rc_buggy.svg') }}" alt="{{ product.name }}">
+                {% endif %}
+            </div>
+            <div class="product-details-body">
+                <div class="product-category-label">{{ product.category or 'RC Vehicle' }}</div>
+                <h3 class="product-title">{{ product.name }}</h3>
+                <div class="product-rating">
+                    &#9733;&#9733;&#9733;&#9733;&#9733; <span>(5.0)</span>
+                </div>
+                <div class="product-price-row">
+                    <div class="product-price">₹{{ "%.2f"|format(product.price) }}</div>
+                </div>
+                <a href="/user/product/{{ product.product_id }}" class="btn-view-details">VIEW DETAILS</a>
+            </div>
+        </div>
         {% endfor %}
-    </select>
+    {% else %}
+        <!-- Featured Stock Mock Items matching theme image if database is empty or filtered -->
+        <div class="product-card">
+            <div class="product-badge">POPULAR</div>
+            <div class="product-image-box">
+                <img src="{{ url_for('static', filename='images/hero_rc_buggy.svg') }}" alt="Traxxas X-Maxx 8S">
+            </div>
+            <div class="product-details-body">
+                <div class="product-category-label">Monster Truck</div>
+                <h3 class="product-title">Traxxas X-Maxx 8S 4WD Brushless</h3>
+                <div class="product-rating">
+                    &#9733;&#9733;&#9733;&#9733;&#9733; <span>(48)</span>
+                </div>
+                <div class="product-price-row">
+                    <div class="product-price">₹59,999.00</div>
+                </div>
+                <a href="/user-login" class="btn-view-details">VIEW DETAILS</a>
+            </div>
+        </div>
 
-    <button type="submit">Filter</button>
-</form>
+        <div class="product-card">
+            <div class="product-badge">NEW</div>
+            <div class="product-image-box">
+                <img src="{{ url_for('static', filename='images/cat_short_course.svg') }}" alt="ARRMA Infraction 6S">
+            </div>
+            <div class="product-details-body">
+                <div class="product-category-label">Street Basher</div>
+                <h3 class="product-title">ARRMA Infraction 6S BLX All-Road</h3>
+                <div class="product-rating">
+                    &#9733;&#9733;&#9733;&#9733;&#9733; <span>(35)</span>
+                </div>
+                <div class="product-price-row">
+                    <div class="product-price">₹49,999.00</div>
+                </div>
+                <a href="/user-login" class="btn-view-details">VIEW DETAILS</a>
+            </div>
+        </div>
 
-<hr>
+        <div class="product-card">
+            <div class="product-badge">BESTSELLER</div>
+            <div class="product-image-box">
+                <img src="{{ url_for('static', filename='images/cat_crawler.svg') }}" alt="Losi Super Baja Rey 2.0">
+            </div>
+            <div class="product-details-body">
+                <div class="product-category-label">Desert Truck</div>
+                <h3 class="product-title">Losi Super Baja Rey 2.0 4WD Desert</h3>
+                <div class="product-rating">
+                    &#9733;&#9733;&#9733;&#9733;&#9733; <span>(29)</span>
+                </div>
+                <div class="product-price-row">
+                    <div class="product-price">₹79,999.00</div>
+                </div>
+                <a href="/user-login" class="btn-view-details">VIEW DETAILS</a>
+            </div>
+        </div>
 
-<!-- Product Cards -->
-<div class="product-container">
-
-{% for product in products %}
-<div class="product-card">
-
-    <img src="/static/uploads/product_images/{{ product.image }}">
-
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.category }}</p>
-    <p><strong>₹{{ product.price }}</strong></p>
-
-    <a href="/user/product/{{ product.product_id }}">View Details</a>
-    <br>
-    <a href="/user-dashboard">Home</a>
+        <div class="product-card">
+            <div class="product-badge">SCALE</div>
+            <div class="product-image-box">
+                <img src="{{ url_for('static', filename='images/cat_crawler.svg') }}" alt="Axial SCX10 III">
+            </div>
+            <div class="product-details-body">
+                <div class="product-category-label">Rock Crawler</div>
+                <h3 class="product-title">Axial SCX10 III Jeep JLU Wrangler 4WD</h3>
+                <div class="product-rating">
+                    &#9733;&#9733;&#9733;&#9733;&#9733; <span>(62)</span>
+                </div>
+                <div class="product-price-row">
+                    <div class="product-price">₹49,999.00</div>
+                </div>
+                <a href="/user-login" class="btn-view-details">VIEW DETAILS</a>
+            </div>
+        </div>
+    {% endif %}
 </div>
-{% endfor %}
-
-</div>
-
-</body>
-</html>
+{% endblock %}

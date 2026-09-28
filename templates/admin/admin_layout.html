@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Portal | TERRAIN X-TREME RC{% endblock %}</title>
+    <!-- Google Fonts & Theme CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .admin-nav-bar {
+            background-color: var(--bg-dark-header);
+            border-bottom: 2px solid var(--primary-orange);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        .admin-nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .admin-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .admin-menu-link {
+            font-family: var(--font-subheading);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .admin-menu-link:hover, .admin-menu-link.active {
+            color: #ffffff;
+            background-color: var(--bg-dark-elevated);
+        }
+        .admin-user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-dark-card);
+            border: 1px solid var(--border-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ADMIN HEADER NAVBAR -->
+    <header class="admin-nav-bar">
+        <div class="admin-nav-container">
+            <!-- Brand Logo -->
+            <a href="/admin-dashboard" class="brand-logo" style="text-decoration: none;">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">TERRAIN <span>X-ADMIN</span></span>
+                    <span class="brand-subtitle">CONTROL & INVENTORY PANEL</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            {% if session.get('admin_id') %}
+            <nav class="admin-menu">
+                <a href="/admin-dashboard" class="admin-menu-link">Dashboard</a>
+                <a href="/admin/item-list" class="admin-menu-link">Products Catalog</a>
+                <a href="/admin/add-item" class="admin-menu-link" style="color: var(--primary-orange);">+ Add Product</a>
+                <a href="/admin/profile" class="admin-menu-link">Profile</a>
+            </nav>
+
+            <div class="admin-user-badge">
+                <div style="display: flex; flex-direction: column; text-align: right;">
+                    <span style="font-size: 13px; font-weight: 700; color: #ffffff;">{{ session.get('admin_name', 'Admin') }}</span>
+                    <span style="font-size: 10px; color: var(--primary-orange); font-weight: 600;">SUPERADMIN</span>
+                </div>
+                <a href="/admin-logout" class="btn-action-delete" style="padding: 4px 10px; font-size: 11px;">Logout</a>
+            </div>
+            {% else %}
+            <div class="top-bar-links">
+                <a href="/admin-login" class="admin-menu-link">Login</a>
+                <a href="/admin-signup" class="admin-menu-link" style="color: var(--primary-orange);">Register Admin</a>
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div style="max-width: 1400px; margin: 20px auto 0; padding: 0 24px;">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category in ['danger', 'error'] else 'success' }}">
+                {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- MAIN CONTENT -->
+    <main style="max-width: 1400px; margin: 24px auto; padding: 0 24px; min-height: 70vh;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="footer-bottom">
+            &copy; 2026 TERRAIN X-TREME RC Admin Portal | SmartCart Management Engine
+        </div>
+    </footer>
+
+</body>
+</html>

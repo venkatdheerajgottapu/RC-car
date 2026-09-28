@@ -1,0 +1,55 @@
+{% extends "admin/admin_layout.html" %}
+
+{% block title %}Add New Product | Admin Portal{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 650px;">
+    <div style="text-align: center; margin-bottom: 24px;">
+        <span style="font-family: var(--font-subheading); font-size: 11px; font-weight: 800; color: var(--primary-orange); letter-spacing: 2px;">INVENTORY MANAGEMENT</span>
+        <h2>ADD NEW PRODUCT</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Fill in the product details to publish to the store catalog.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('add_item') }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Product Name *</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Traxxas X-Maxx 8S Brushless Monster Truck" required>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category *</label>
+            <select id="category" name="category" class="form-control" required>
+                <option value="" disabled selected>Select Product Category</option>
+                <option value="RC Cars">RC Cars</option>
+                <option value="Monster Trucks">Monster Trucks</option>
+                <option value="Rock Crawlers">Rock Crawlers</option>
+                <option value="Drift Cars">Drift Cars</option>
+                <option value="Parts">Parts & Upgrades</option>
+                <option value="Batteries">Batteries & Chargers</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price (₹ INR) *</label>
+            <input type="number" step="0.01" min="0" id="price" name="price" class="form-control" placeholder="e.g. 14999.00" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Product Description *</label>
+            <textarea id="description" name="description" class="form-control" rows="4" placeholder="Detailed product specifications, features, scale, and performance details..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="image">Product Image Upload *</label>
+            <input type="file" id="image" name="image" class="form-control" accept="image/*" required style="padding: 10px;">
+            <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block;">Supported formats: PNG, JPG, JPEG, WEBP, GIF (Max file size: 5MB)</span>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 28px;">
+            <button type="submit" class="btn-submit" style="flex: 2;">Publish Product</button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn-action-secondary" style="flex: 1; text-align: center; justify-content: center;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

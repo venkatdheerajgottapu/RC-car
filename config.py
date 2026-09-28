@@ -7,11 +7,9 @@
 
 SECRET_KEY = "your_secret_key_here"   # used for sessions
 
-# MySQL Database Configuration
-DB_HOST = "localhost"
-DB_USER = "root"
-DB_PASSWORD = "220604"  # keep empty if no password
-DB_NAME = "smartcart_db"
+# SQLite Database Configuration
+# The database is stored locally in the project folder.
+DB_PATH = "smartcart.db"
 
 # Email SMTP Settings
 MAIL_SERVER = 'smtp.gmail.com'
