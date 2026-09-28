@@ -7,9 +7,12 @@
 
 SECRET_KEY = "your_secret_key_here"   # used for sessions
 
+import os
+
 # SQLite Database Configuration
 # The database is stored locally in the project folder.
-DB_PATH = "smartcart.db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "smartcart.db")
 
 # Email SMTP Settings
 MAIL_SERVER = 'smtp.gmail.com'

@@ -207,9 +207,13 @@ def admin_signup():
         f"Your OTP for SmartCart Admin Registration is: {otp}"
     )
 
-    mail.send(message)
-
-    flash("OTP sent to your email!", "success")
+    try:
+        mail.send(message)
+        flash("OTP sent to your email!", "success")
+    except Exception as e:
+        print(f"Mail send error (SMTP may be restricted on hosting): {e}")
+        print(f"DEBUG OTP for {email}: {otp}")
+        flash(f"Could not send email due to host network restriction. Use OTP: {otp}", "warning")
 
     return redirect('/verify-otp')
 
@@ -426,7 +430,7 @@ from werkzeug.utils import secure_filename
 # IMAGE UPLOAD CONFIGURATION
 # =========================================================
 
-UPLOAD_FOLDER = 'static/uploads/product_images'
+UPLOAD_FOLDER = os.path.join(config.BASE_DIR, 'static', 'uploads', 'product_images')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -438,7 +442,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # ADMIN PROFILE IMAGE UPLOAD CONFIGURATION
 # =========================================================
 
-ADMIN_UPLOAD_FOLDER = 'static/uploads/admin_images'
+ADMIN_UPLOAD_FOLDER = os.path.join(config.BASE_DIR, 'static', 'uploads', 'admin_images')
 
 app.config['ADMIN_UPLOAD_FOLDER'] = ADMIN_UPLOAD_FOLDER
 
